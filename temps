@@ -51,7 +51,7 @@ def get_temps():
 if __name__ == "__main__":
 
     if len(sys.argv) > 1 and (sys.argv[1] == "--help" or sys.argv[1] == "-h"):
-        print("A Python script useful to keep an eye on device's temperatures. It includes information about the CPU, each CORE and the GPU.\n")
+        print("A useful Python script to keep an eye on device's temperatures. It includes information about the CPU, each CORE and the GPU.\n")
         print(bcolors.UNDERLINE + "Usage:" + bcolors.ENDC + " temps [OPTION]\n")
         print(bcolors.UNDERLINE + "Options\033[0m:" + bcolors.ENDC)
         print("  -s <TIME>")
