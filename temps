@@ -1,9 +1,22 @@
+#!/bin/python3.12
+
 import subprocess
 import time
 import sys
 import json
 import xml.etree.ElementTree as ET
-import colorama
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 def handle_temps(temps):
     output = {}
@@ -36,26 +49,48 @@ def get_temps():
     return handle_temps(temps) | handle_nvidia(nvidia)
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 1 and (sys.argv[1] == "--help" or sys.argv[1]) == "-h":
+        print("A Python script useful to keep an eye on device's temperatures. It includes the information on the CPU, on each CORE and on the GPU.\n")
+        print(bcolors.UNDERLINE + "Usage:" + bcolors.ENDC + " temps [OPTION]\n")
+        print(bcolors.UNDERLINE + "Options\033[0m:" + bcolors.ENDC)
+        print("  -s <TIME>")
+        print("\tChange fetching interval in seconds (min 0.2s)\n")
+        print("  -h, --help")
+        print("\tPrint this message")
+        sys.exit(0)
+
     # Interval has to be int and greater than 0, passed via 'python3 temps.py -s <interval>'
-    interval = sys.argv[sys.argv.index("-s") + 1] if "-s" in sys.argv else 1
+    try:
+        interval = sys.argv[sys.argv.index("-s") + 1] if "-s" in sys.argv and sys.argv[sys.argv.index("-s")] else 1
+    except IndexError:
+        print(bcolors.FAIL + "error:" + bcolors.ENDC + " you must specify an interval of at least 0.2s\n")
+        print(bcolors.UNDERLINE + "Usage:" + bcolors.ENDC + " temps -s <TIME>\n")
+        print("See -h or --help for more information")
+        sys.exit(0)
+
+    if float(interval) < 0.2:
+        print("Interval must be at least 0.2s")
+        sys.exit(0)
+    
     prev = {}
     try:
         while True:
             # Clear the screen
             print("\033c", end="")
             # Get the temperatures and print them
-            json_output, output, separator = get_temps(), "", f"{colorama.Fore.BLUE}>>>{colorama.Fore.RESET}"
+            json_output, output, separator = get_temps(), "", f">>>"
             for key, value in json_output.items():
                 if key not in prev: prev[key] = value
                 # Calculate the difference between the current and previous temperature
                 delta = float(value) - float(prev.get(key, 0))
                 # Color the delta based on the sign and stringify it
-                delta = f"{colorama.Fore.RED}+{delta}{colorama.Fore.RESET}" if delta > 0 else f"{colorama.Fore.GREEN}{delta}{colorama.Fore.RESET}" if delta < 0 else f"+{delta}{colorama.Fore.RESET}"
+                delta = f"+{delta}" if delta > 0 else f"{delta}" if delta < 0 else f"+{delta}"
                 output += f"{key}\t{separator}\t{value} ({delta}°C {interval}s delta)\n"
             print(f"Fetching Temperatures every {interval}s ({time.ctime()})")
             print("Press Ctrl+C to exit")
             print(output)
             prev = json_output
-            time.sleep(int(interval))
+            time.sleep(float(interval))
     except KeyboardInterrupt:
         print("\nExiting...")
