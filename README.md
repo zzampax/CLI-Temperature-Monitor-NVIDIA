@@ -14,18 +14,14 @@ sudo dnf install lm_sensors
 To install `nvidia-smi`:
 ```bash
 # For Ubuntu/Debian
-sudo apt-get install nvidia-smi
+sudo apt-get install nvidia-utils
 # For Arch Linux
-sudo pacman -S nvidia-smi
+sudo pacman -S nvidia-utils
 # For Fedora
-sudo yum install nvidia-smi
-sudo dnf install nvidia-smi
+sudo yum install nvidia-utils
+sudo dnf install nvidia-utils
 ```
-To run the script you should install the `requirements.txt` preferably in a virtual environment:
+Since the script has a Shebang, you can run it like this:
 ```bash
-pip install -r requirements.txt
-```
-Then you can run the script:
-```bash
-python3 main.py
+./temps
 ```
