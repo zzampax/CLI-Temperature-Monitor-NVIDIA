@@ -52,8 +52,10 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and (sys.argv[1] == "--help" or sys.argv[1] == "-h"):
         print("A useful Python script to keep an eye on device's temperatures. It includes information about the CPU, each CORE and the GPU.\n")
-        print(bcolors.UNDERLINE + "Usage:" + bcolors.ENDC + " temps [OPTION]\n")
-        print(bcolors.UNDERLINE + "Options\033[0m:" + bcolors.ENDC)
+        print(bcolors.UNDERLINE + "Usage" + bcolors.ENDC + ":")
+        print("  - temps")
+        print("  - temps [OPTION]\n")
+        print(bcolors.UNDERLINE + "Options" + bcolors.ENDC + ":")
         print("  -s <TIME>")
         print("\tChange fetching interval in seconds (min 0.2s)\n")
         print("  -h, --help")
@@ -65,7 +67,7 @@ if __name__ == "__main__":
         interval = sys.argv[sys.argv.index("-s") + 1] if "-s" in sys.argv and sys.argv[sys.argv.index("-s")] else 1
     except IndexError:
         print(bcolors.FAIL + "error:" + bcolors.ENDC + " you must specify an interval of at least 0.2s\n")
-        print(bcolors.UNDERLINE + "Usage:" + bcolors.ENDC + " temps -s <TIME>\n")
+        print(bcolors.UNDERLINE + "Usage" + bcolors.ENDC + ": temps -s <TIME>\n")
         print("See -h or --help for more information")
         sys.exit(0)
 
